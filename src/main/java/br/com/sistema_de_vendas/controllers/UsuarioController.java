@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sistema_de_vendas.DTOs.UsuarioDTO;
 import br.com.sistema_de_vendas.Exception.BusinessException;
 import br.com.sistema_de_vendas.models.UsuarioModel;
+import br.com.sistema_de_vendas.models.Enum.UsuarioRole;
+import br.com.sistema_de_vendas.models.Enum.UsuarioStatus;
 import br.com.sistema_de_vendas.repositories.UsuarioRepository;
 import jakarta.validation.Valid;
 
@@ -27,7 +29,7 @@ public class UsuarioController {
     private UsuarioRepository usuarioRepository;
 
     @PostMapping
-    public void cadastrarUsuario(@Valid @RequestBody UsuarioDTO usuario) {
+    public ResponseEntity<UsuarioModel> cadastrarUsuario(@Valid @RequestBody UsuarioDTO usuario) {
         // Verificar se o email já existe
         if (usuarioRepository.existsByEmail(usuario.email())) {
             throw new BusinessException("Email já cadastrado");
@@ -38,7 +40,10 @@ public class UsuarioController {
         usuarioNovo.setEmail(usuario.email());
         usuarioNovo.setSenha(usuario.senha());
         usuarioNovo.setTelefone(usuario.telefone());
-        usuarioRepository.save(usuarioNovo);
+        usuarioNovo.setRole(UsuarioRole.valueOf(usuario.role().toUpperCase()));
+        usuarioNovo.setStatus(UsuarioStatus.valueOf(usuario.status().toUpperCase())); // Definir status como ATIVO por padrão
+        UsuarioModel salvo = usuarioRepository.save(usuarioNovo);
+        return ResponseEntity.status(201).body(salvo);
     }
 
     @GetMapping("/listar")
@@ -54,7 +59,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioModel> atualizarUsuario(@PathVariable UUID id, @RequestBody UsuarioDTO usuarioDto) {
+    public ResponseEntity<UsuarioModel> atualizarUsuario(@Valid @PathVariable UUID id, @RequestBody UsuarioDTO usuarioDto) {
         return usuarioRepository.findById(id)
                 .map(usuarioExistente -> {
                     usuarioExistente.setNomeCompleto(usuarioDto.nomeCompleto());
@@ -62,7 +67,8 @@ public class UsuarioController {
                     usuarioExistente.setEmail(usuarioDto.email());
                     usuarioExistente.setSenha(usuarioDto.senha());
                     usuarioExistente.setTelefone(usuarioDto.telefone());
-
+                    usuarioExistente.setRole(UsuarioRole.valueOf(usuarioDto.role().toUpperCase()));
+                    usuarioExistente.setStatus(UsuarioStatus.valueOf(usuarioDto.status().toUpperCase()));
                     UsuarioModel atualizado = usuarioRepository.save(usuarioExistente);
                     return ResponseEntity.ok().body(atualizado);
                 }).orElse(ResponseEntity.notFound().build());

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sistema_de_vendas.DTOs.ClienteDTO;
 import br.com.sistema_de_vendas.Exception.BusinessException;
 import br.com.sistema_de_vendas.models.ClienteModel;
+import br.com.sistema_de_vendas.models.Enum.ClienteStatus;
 import br.com.sistema_de_vendas.repositories.ClienteRepository;
 import jakarta.validation.Valid;
 
@@ -45,6 +46,7 @@ public class ClienteController {
         if (cliente.dataFundacao() != null && !cliente.dataFundacao().trim().isEmpty()) {
             clienteNovo.setDataFundacao(LocalDate.parse(cliente.dataFundacao()));
         }
+        clienteNovo.setStatus(ClienteStatus.valueOf(cliente.status()));
         clienteNovo.setIe(cliente.ie());
         clienteNovo.setEndereco(cliente.endereco());
         clienteNovo.setEmail(cliente.email());
@@ -68,19 +70,20 @@ public class ClienteController {
 
     // ATUALIZAR
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteModel> atualizarCliente(@PathVariable UUID id, @RequestBody ClienteDTO clienteDto) {
+    public ResponseEntity<ClienteModel> atualizarCliente(@Valid @PathVariable UUID id, @RequestBody ClienteDTO cliente) {
         return clienteRepository.findById(id)
                 .map(clienteExistente -> {
-                    clienteExistente.setRazaoSocial(clienteDto.razaoSocial());
-                    clienteExistente.setNomeFantasia(clienteDto.nomeFantasia());
-                    clienteExistente.setCnpj(clienteDto.cnpj());
-                    if (clienteDto.dataFundacao() != null && !clienteDto.dataFundacao().trim().isEmpty()) {
-                        clienteExistente.setDataFundacao(LocalDate.parse(clienteDto.dataFundacao()));
+                    clienteExistente.setRazaoSocial(cliente.razaoSocial());
+                    clienteExistente.setNomeFantasia(cliente.nomeFantasia());
+                    clienteExistente.setCnpj(cliente.cnpj());
+                    if (cliente.dataFundacao() != null && !cliente.dataFundacao().trim().isEmpty()) {
+                        clienteExistente.setDataFundacao(LocalDate.parse(cliente.dataFundacao()));
                     }
-                    clienteExistente.setIe(clienteDto.ie());
-                    clienteExistente.setEndereco(clienteDto.endereco());
-                    clienteExistente.setEmail(clienteDto.email());
-                    clienteExistente.setTelefone(clienteDto.telefone());
+                    clienteExistente.setStatus(ClienteStatus.valueOf(cliente.status()));
+                    clienteExistente.setIe(cliente.ie());
+                    clienteExistente.setEndereco(cliente.endereco());
+                    clienteExistente.setEmail(cliente.email());
+                    clienteExistente.setTelefone(cliente.telefone());
 
                     ClienteModel atualizado = clienteRepository.save(clienteExistente);
                     return ResponseEntity.ok().body(atualizado);

@@ -17,10 +17,12 @@ public record ClienteDTO(
         String cnpj,
         @NotBlank(message = "Inscrição estadual é obrigatória")
         String ie,
-        @NotBlank(message = "Endereço é obrigatório")  
+        @NotBlank(message = "Endereço é obrigatório")
         String endereco,
-        @NotBlank(message = "Email é obrigatório")  
+        @NotBlank(message = "Email é obrigatório")
         String email,
         @NotBlank(message = "Telefone é obrigatório")  
-        String telefone
-    ) {}
+        String telefone,
+        @NotBlank(message = "Status é obrigatório")
+        String status) {
+}
