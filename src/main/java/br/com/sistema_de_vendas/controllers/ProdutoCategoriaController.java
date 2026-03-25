@@ -16,7 +16,7 @@ import br.com.sistema_de_vendas.repositories.ProdutoCategoriaRepository;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/produto-categoria")
+@RequestMapping("/categorias")
 public class ProdutoCategoriaController {
 
     @Autowired

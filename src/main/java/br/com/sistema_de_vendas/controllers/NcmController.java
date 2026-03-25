@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.com.sistema_de_vendas.DTOs.NcmDTO;
 import br.com.sistema_de_vendas.models.NcmModel;
 import br.com.sistema_de_vendas.repositories.NcmRepository;
@@ -33,7 +32,8 @@ public class NcmController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<NcmModel> atualizarNcm(@Valid @RequestBody UUID id, NcmDTO ncm) {
+    public ResponseEntity<NcmModel> atualizarNcm(@Valid @PathVariable UUID id, @RequestBody NcmDTO ncm) {
+        System.out.println(ncm);
         return ncmRepository.findById(id)
                 .map(ncmModel -> {
                     ncmModel.setCodigo(ncm.codigo());

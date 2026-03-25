@@ -17,7 +17,7 @@ import br.com.sistema_de_vendas.repositories.ProdutoLitragemRepository;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/produto-litragem")
+@RequestMapping("/litragem")
 public class ProdutoLitragemController {
 
     @Autowired

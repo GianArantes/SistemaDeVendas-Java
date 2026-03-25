@@ -39,15 +39,16 @@ public class ProdutoController {
 
     @PostMapping
     public void cadastrarProduto(@Valid @RequestBody ProdutoDTO produtoNovo) {
+        System.out.println(produtoNovo);
         ProdutoModel produtoModel = new ProdutoModel();
         produtoModel.setNome(produtoNovo.nome());
         produtoModel.setRefNf(produtoNovo.refNf());
         produtoModel.setIpi(produtoNovo.ipi());
         produtoModel.setPeso(produtoNovo.peso());
-        produtoModel.setQtdPorEmbalagem(produtoNovo.quantidadePorEmbalagem());
+        produtoModel.setQtdPorEmbalagem(produtoNovo.qtdadePorEmbalagem());
         produtoModel.setNcm(ncmRepository.findById(UUID.fromString(produtoNovo.ncmId())).orElse(null));
-        produtoModel.setCategoria(categoriaRepository.findById(produtoNovo.produtoCategoriaId()).orElse(null));
-        produtoModel.setLitragem(litragemRepository.findById(produtoNovo.produtoLitragemId()).orElse(null));
+        produtoModel.setCategoria(categoriaRepository.findById(produtoNovo.categoriaId()).orElse(null));
+        produtoModel.setLitragem(litragemRepository.findById(produtoNovo.litragemId()).orElse(null));
         produtoRepository.save(produtoModel);
 
     }
@@ -60,10 +61,10 @@ public class ProdutoController {
             produtoModel.setRefNf(produtoNovo.refNf());
             produtoModel.setIpi(produtoNovo.ipi());
             produtoModel.setPeso(produtoNovo.peso());
-            produtoModel.setQtdPorEmbalagem(produtoNovo.quantidadePorEmbalagem());
+            produtoModel.setQtdPorEmbalagem(produtoNovo.qtdadePorEmbalagem());
             produtoModel.setNcm(ncmRepository.findById(UUID.fromString(produtoNovo.ncmId())).orElse(null));
-            produtoModel.setCategoria(categoriaRepository.findById(produtoNovo.produtoCategoriaId()).orElse(null));
-            produtoModel.setLitragem(litragemRepository.findById(produtoNovo.produtoLitragemId()).orElse(null));
+            produtoModel.setCategoria(categoriaRepository.findById(produtoNovo.categoriaId()).orElse(null));
+            produtoModel.setLitragem(litragemRepository.findById(produtoNovo.litragemId()).orElse(null));
             produtoRepository.save(produtoModel);
         }
 

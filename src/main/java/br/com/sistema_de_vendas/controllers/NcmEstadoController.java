@@ -69,8 +69,8 @@ public class NcmEstadoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/listar")
-    public Iterable<NcmEstadoModel> listarNcmsEstados() {
-        return ncmEstadoRepository.findAll();
+    @GetMapping("/listar/{id}")
+    public Iterable<NcmEstadoModel> listarNcmsEstados(@PathVariable UUID id) {
+        return ncmEstadoRepository.findByNcmIdOrderByEstadoAsc(id);
     }
 }
