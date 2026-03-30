@@ -44,6 +44,54 @@ Projeto Java Spring Boot de backend para um sistema de vendas simples, com API R
 - `NcmModel` e `NcmEstadoModel`
   - Tabelas de NCM e alíquotas por estado.
 
+## Dicionário de Entidades e Campos
+- `ClienteModel`: `id`, `razaoSocial`, `nomeFantasia`, `cnpj`, `ie`, `dataFundacao`, `email`, `telefone`, `status`, `enderecoRegistro`, `enderecoEntrega`, `enderecoCobranca`.
+- `EnderecoModel`: `id`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `estado`, `cep`.
+- `UsuarioModel`: `id`, `nome`, `email`, `senha`, `role`, `status`.
+- `ProdutoModel`: `id`, `descricao`, `codigo`, `ncm`, `produtoCategoria`, `produtoLitragem`, `valor`.
+- `TabelaPrecoModel`: `id`, `descricao`, `dataInicio`, `dataFim`, `ativo`.
+- `ProdutoTabelaPrecoModel`: `id`, `produto`, `tabelaPreco`, `preco`.
+- `NcmModel`: `id`, `codigo`, `descricao`.
+- `NcmEstadoModel`: `id`, `ncm`, `estado`, `aliquota`.
+
+## 📦 Domínio de Vendas e Tributação
+### Entidades de Apoio
+- `PrazoVendaModel`: `id`, `descricao`, `quantidadeDias`.
+- `TransportadoraModel`: `id`, `razaoSocial`, `cnpj`, `telefone`.
+
+### Regras de Cálculo e Impostos
+1. **Preço de Item:** Buscar em `ProdutoTabelaPrecoModel(produto, tabela)`.
+2. **Desconto:** Aplicar `valorItem * (1 - desconto/100)` antes de qualquer imposto.
+3. **IPI:** Calculado sobre o valor com desconto.
+4. **ST (Substituição Tributária):** - Origem: `NcmEstadoModel` (filtro por NCM do produto e UF do endereço de entrega do cliente).
+   - Se não encontrado, alíquota = 0.
+5. **Custo Unitário Cliente:** `(ValorComDesconto + IPI + ST) / produto.qtdPorEmbalagem`.
+6. **Frete:** Tipos permitidos: `CIF`, `RETIRA`, `FOB`. Se `FOB`, exige dados da transportadora.
+
+### Contratos de Venda
+- `VendaRequestDTO`: `vendedorId`, `clienteCnpj`, `prazoVendaId`, `tabelaPrecoId`, `tipoFrete`, `transportadoraDTO`, `List<VendaItemDTO>`.
+
+
+## Assinatura de Métodos de Negócio (Service Contracts)
+- Cada serviço deve expor um contrato claro em métodos públicos simples.
+- Serviços de validação recebem DTOs e não retornam entidades: `void validate(EntidadeDTO dto)`.
+- Serviços de domínio podem incluir métodos CRUD quando necessário, por exemplo: `ProdutoModel save(ProdutoDTO dto)`, `void delete(UUID id)`, `Optional<ProdutoModel> findById(UUID id)`.
+- Serviços não devem expor implementações de repositório ou consultas complexas diretamente ao controller.
+- Contratos devem ser descritos com comentários sucintos em cada método público do service.
+
+## Padrão de Resposta de Erros (Error Handling)
+- Usar `BusinessException` para erros de validação e regras de negócio.
+- Capturar exceções no `GlobalExceptionHandler` e retornar payload JSON consistente.
+- Padrão de resposta de erro deve conter ao menos:
+  - `timestamp`
+  - `status`
+  - `error`
+  - `message`
+  - `path`
+- Para erros de validação, retornar status `400 Bad Request` com mensagem clara sobre o campo inválido.
+- Para recursos não encontrados, retornar `404 Not Found`.
+- Para erros inesperados, retornar `500 Internal Server Error` com mensagem genérica e registrar detalhes internamente.
+
 ## Fluxo principal
 1. Requisição HTTP chega ao `Controller` correspondente.
 2. Controller aceita um `DTO` e chama o serviço específico para validação.

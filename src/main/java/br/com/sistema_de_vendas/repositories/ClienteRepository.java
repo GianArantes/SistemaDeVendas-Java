@@ -1,11 +1,12 @@
 package br.com.sistema_de_vendas.repositories;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.sistema_de_vendas.models.ClienteModel;
-
-import java.util.UUID;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<ClienteModel, UUID> {
@@ -19,6 +20,11 @@ public interface ClienteRepository extends JpaRepository<ClienteModel, UUID> {
      * Verifica se já existe cliente cadastrado com o mesmo CNPJ.
      */
     boolean existsByCnpj(String cnpj);
+
+    /**
+     * Busca cliente pelo CNPJ.
+     */
+    Optional<ClienteModel> findByCnpj(String cnpj);
 
 }
 
