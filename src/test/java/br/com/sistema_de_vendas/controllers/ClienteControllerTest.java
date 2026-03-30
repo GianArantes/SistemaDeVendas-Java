@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import br.com.sistema_de_vendas.DTOs.ClienteDTO;
+import br.com.sistema_de_vendas.DTOs.EnderecoDTO;
 import br.com.sistema_de_vendas.Exception.BusinessException;
 import br.com.sistema_de_vendas.models.ClienteModel;
 import br.com.sistema_de_vendas.models.Enum.ClienteStatus;
@@ -43,13 +44,24 @@ class ClienteControllerTest {
 
     @BeforeEach
     void setup() {
+        EnderecoDTO endereco = new EnderecoDTO(
+                "Rua Teste",
+                "100",
+                "Apto 101",
+                "12345678",
+                "Centro",
+                "São Paulo",
+                "SP");
+
         clienteDTO = new ClienteDTO(
                 "Empresa Exemplo",
                 "2010-05-20",
                 "Exemplo Ltda",
                 "12345678000199",
                 "123456789",
-                "Rua Teste, 100",
+                endereco,
+                endereco,
+                endereco,
                 "contato@exemplo.com",
                 "(11) 99999-9999",
                 ClienteStatus.ATIVO.name());
@@ -74,13 +86,24 @@ class ClienteControllerTest {
 
     @Test
     void cadastrarCliente_comCnpjVazio_deveLancarBusinessException() {
+        EnderecoDTO endereco = new EnderecoDTO(
+                "Rua Teste",
+                "100",
+                "Apto 101",
+                "12345678",
+                "Centro",
+                "São Paulo",
+                "SP");
+
         ClienteDTO invalid = new ClienteDTO(
                 "Empresa Exemplo",
                 "2010-05-20",
                 "Exemplo Ltda",
                 "",
                 "123456789",
-                "Rua Teste, 100",
+                endereco,
+                endereco,
+                endereco,
                 "contato@exemplo.com",
                 "(11) 99999-9999",
                 ClienteStatus.ATIVO.name());

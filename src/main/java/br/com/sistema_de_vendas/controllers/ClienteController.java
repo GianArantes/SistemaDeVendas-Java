@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.sistema_de_vendas.DTOs.ClienteDTO;
+import br.com.sistema_de_vendas.DTOs.EnderecoDTO;
 import br.com.sistema_de_vendas.Exception.BusinessException;
 import br.com.sistema_de_vendas.models.ClienteModel;
+import br.com.sistema_de_vendas.models.EnderecoModel;
 import br.com.sistema_de_vendas.models.Enum.ClienteStatus;
 import br.com.sistema_de_vendas.repositories.ClienteRepository;
 import br.com.sistema_de_vendas.services.ClienteService;
@@ -51,7 +53,9 @@ public class ClienteController {
         }
         clienteNovo.setStatus(ClienteStatus.valueOf(cliente.status()));
         clienteNovo.setIe(cliente.ie());
-        clienteNovo.setEndereco(cliente.endereco());
+        clienteNovo.setEnderecoRegistro(buildEnderecoModel(cliente.enderecoRegistro()));
+        clienteNovo.setEnderecoEntrega(buildEnderecoModel(cliente.enderecoEntrega()));
+        clienteNovo.setEnderecoCobranca(buildEnderecoModel(cliente.enderecoCobranca()));
         clienteNovo.setEmail(cliente.email());
         clienteNovo.setTelefone(cliente.telefone());
         ClienteModel salvo = clienteRepository.save(clienteNovo);
@@ -91,7 +95,9 @@ public class ClienteController {
                     }
                     clienteExistente.setStatus(ClienteStatus.valueOf(cliente.status()));
                     clienteExistente.setIe(cliente.ie());
-                    clienteExistente.setEndereco(cliente.endereco());
+                    clienteExistente.setEnderecoRegistro(buildEnderecoModel(cliente.enderecoRegistro()));
+                    clienteExistente.setEnderecoEntrega(buildEnderecoModel(cliente.enderecoEntrega()));
+                    clienteExistente.setEnderecoCobranca(buildEnderecoModel(cliente.enderecoCobranca()));
                     clienteExistente.setEmail(cliente.email());
                     clienteExistente.setTelefone(cliente.telefone());
 
@@ -110,6 +116,18 @@ public class ClienteController {
                     clienteRepository.deleteById(id);
                     return ResponseEntity.noContent().<Void>build();
                 }).orElse(ResponseEntity.notFound().build());
+    }
+
+    private EnderecoModel buildEnderecoModel(EnderecoDTO endereco) {
+        EnderecoModel model = new EnderecoModel();
+        model.setLogradouro(endereco.logradouro());
+        model.setNumero(endereco.numero());
+        model.setComplemento(endereco.complemento());
+        model.setCep(endereco.cep());
+        model.setBairro(endereco.bairro());
+        model.setCidade(endereco.cidade());
+        model.setEstado(endereco.estado());
+        return model;
     }
 
 }

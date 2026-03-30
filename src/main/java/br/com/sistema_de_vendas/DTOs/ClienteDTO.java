@@ -2,7 +2,9 @@ package br.com.sistema_de_vendas.DTOs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 
 public record ClienteDTO(
@@ -17,8 +19,15 @@ public record ClienteDTO(
         String cnpj,
         @NotBlank(message = "Inscrição estadual é obrigatória")
         String ie,
-        @NotBlank(message = "Endereço é obrigatório")
-        String endereco,
+        @NotNull(message = "Endereço de registro é obrigatório")
+        @Valid
+        EnderecoDTO enderecoRegistro,
+        @NotNull(message = "Endereço de entrega é obrigatório")
+        @Valid
+        EnderecoDTO enderecoEntrega,
+        @NotNull(message = "Endereço de cobrança é obrigatório")
+        @Valid
+        EnderecoDTO enderecoCobranca,
         @NotBlank(message = "Email é obrigatório")
         String email,
         @NotBlank(message = "Telefone é obrigatório")  

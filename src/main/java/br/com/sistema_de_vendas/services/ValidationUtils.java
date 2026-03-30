@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import br.com.sistema_de_vendas.DTOs.EnderecoDTO;
 import br.com.sistema_de_vendas.Exception.BusinessException;
 
 public final class ValidationUtils {
@@ -13,6 +14,7 @@ public final class ValidationUtils {
     private static final Pattern CNPJ_PATTERN = Pattern.compile("\\d{14}");
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
     private static final Pattern NCM_PATTERN = Pattern.compile("\\d{8}");
+    private static final Pattern CEP_PATTERN = Pattern.compile("\\d{8}");
     private static final Pattern STATE_PATTERN = Pattern.compile("[A-Za-z]{2}");
 
     private ValidationUtils() {
@@ -58,7 +60,25 @@ public final class ValidationUtils {
             throw new BusinessException(fieldName + " deve ser um UUID válido");
         }
     }
+    public static void validateEnderecoDTO(EnderecoDTO dto, String fieldName) {
+        if (dto == null) {
+            throw new BusinessException(fieldName + " é obrigatório");
+        }
+        assertNotBlank(dto.logradouro(), fieldName + ".logradouro");
+        assertNotBlank(dto.numero(), fieldName + ".numero");
+        assertNotBlank(dto.cep(), fieldName + ".cep");
+        assertCep(dto.cep(), fieldName + ".cep");
+        assertNotBlank(dto.bairro(), fieldName + ".bairro");
+        assertNotBlank(dto.cidade(), fieldName + ".cidade");
+        assertNotBlank(dto.estado(), fieldName + ".estado");
+        assertState(dto.estado());
+    }
 
+    private static void assertCep(String value, String fieldName) {
+        if (!CEP_PATTERN.matcher(value).matches()) {
+            throw new BusinessException(fieldName + " deve conter exatamente 8 dígitos");
+        }
+    }
     public static <E extends Enum<E>> void assertValidEnum(String value, Class<E> enumClass, String fieldName) {
         try {
             Enum.valueOf(enumClass, value.toUpperCase());

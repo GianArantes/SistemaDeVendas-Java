@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import br.com.sistema_de_vendas.models.Enum.ClienteStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +12,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -45,8 +48,17 @@ public class ClienteModel {
     @Column(nullable = false, length = 30)
     private String ie;
 
-    @Column(nullable = false, length = 300)
-    private String endereco;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @JoinColumn(name = "endereco_registro_id", referencedColumnName = "id", nullable = false)
+    private EnderecoModel enderecoRegistro;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @JoinColumn(name = "endereco_entrega_id", referencedColumnName = "id", nullable = false)
+    private EnderecoModel enderecoEntrega;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @JoinColumn(name = "endereco_cobranca_id", referencedColumnName = "id", nullable = false)
+    private EnderecoModel enderecoCobranca;
 
     @Column(nullable = false, unique = true, length = 100)
     private String email;

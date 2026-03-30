@@ -1,0 +1,59 @@
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\Config\WebConfig.java|14|public void addCorsMappings(CorsRegistry registry) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ClienteController.java|41|public ResponseEntity<ClienteModel> cadastrarCliente(@Valid @RequestBody ClienteDTO cliente) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ClienteController.java|68|public Iterable<ClienteModel> listarClientes() {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ClienteController.java|76|public ResponseEntity<ClienteModel> buscarPorId(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ClienteController.java|86|public ResponseEntity<ClienteModel> atualizarCliente(@Valid @PathVariable UUID id, @RequestBody ClienteDTO cliente) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ClienteController.java|113|public ResponseEntity<Void> deletarCliente(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ClienteController.java|121|private EnderecoModel buildEnderecoModel(EnderecoDTO endereco) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmController.java|33|public void cadastrarNcm(@Valid @RequestBody NcmDTO ncm) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmController.java|45|public ResponseEntity<NcmModel> atualizarNcm(@Valid @PathVariable UUID id, @RequestBody NcmDTO ncm) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmController.java|62|public ResponseEntity<NcmModel> getNcm(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmController.java|72|public Iterable<NcmModel> listarNcms() {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmController.java|80|public ResponseEntity<Void> deletarNcm(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmEstadoController.java|36|public void cadastrarNcmEstado(@Valid @RequestBody NcmEstadoDTO ncmEstado) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmEstadoController.java|67|public ResponseEntity<Void> deletarUsuario(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmEstadoController.java|79|public ResponseEntity<NcmEstadoModel> buscarPorId(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\NcmEstadoController.java|89|public Iterable<NcmEstadoModel> listarNcmsEstados(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoCategoriaController.java|61|public Iterable<ProdutoCategoriaModel> listarProdutoCategoria() {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoCategoriaController.java|69|public ResponseEntity<ProdutoCategoriaModel> getProdutoCategoria(@PathVariable Long id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoCategoriaController.java|79|public ResponseEntity<Void> deletarProdutoCategoria(@PathVariable Long id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoController.java|40|public void cadastrarProduto(@Valid @RequestBody ProdutoDTO produtoNovo) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoController.java|60|public void atualizarProduto(@PathVariable long id, @Valid @RequestBody ProdutoDTO produtoNovo) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoController.java|81|public ProdutoModel getProduto(@PathVariable long id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoController.java|89|public List<ProdutoModel> listarProdutos() {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoController.java|97|public void deletarProduto(@PathVariable long id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoLitragemController.java|62|public Iterable<ProdutoLitragemModel> listarProdutoLitragem() {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoLitragemController.java|70|public ResponseEntity<ProdutoLitragemModel> getProdutoLitragem(@PathVariable Long id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoLitragemController.java|80|public ResponseEntity<Void> deletarProdutoLitragem(@PathVariable Long id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoTabelaPrecoController.java|41|public ResponseEntity<Void> cadastrar(@Valid @RequestBody ProdutoTabelaPrecoDTO dto) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoTabelaPrecoController.java|61|public ResponseEntity<Void> atualizar(@PathVariable UUID id, @Valid @RequestBody ProdutoTabelaPrecoDTO dto) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoTabelaPrecoController.java|84|public ResponseEntity<ProdutoTabelaPrecoModel> getProdutoTabelaPreco(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoTabelaPrecoController.java|94|public Iterable<ProdutoTabelaPrecoModel> listarProdutoTabelaPreco() {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\ProdutoTabelaPrecoController.java|102|public ResponseEntity<Void> deletar(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\TabelaPrecoController.java|34|public ResponseEntity<Void> cadastrar(@RequestBody @Valid TabelaPrecoDTO dto) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\TabelaPrecoController.java|49|public ResponseEntity<Void> atualizar(@PathVariable UUID id, @Valid @RequestBody TabelaPrecoDTO dto) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\TabelaPrecoController.java|64|public ResponseEntity<TabelaPrecoModel> getTabelaPreco(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\TabelaPrecoController.java|81|public ResponseEntity<Void> deleteTabelaPreco(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\UsuarioController.java|38|public ResponseEntity<UsuarioModel> cadastrarUsuario(@Valid @RequestBody UsuarioDTO usuario) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\UsuarioController.java|60|public Iterable<UsuarioModel> listarUsuarios() {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\UsuarioController.java|68|public ResponseEntity<UsuarioModel> buscarPorId(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\UsuarioController.java|78|public ResponseEntity<UsuarioModel> atualizarUsuario(@Valid @PathVariable UUID id, @RequestBody UsuarioDTO usuarioDto) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\controllers\UsuarioController.java|98|public ResponseEntity<Void> deletarUsuario(@PathVariable UUID id) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\DTOs\NcmDTO.java|3|public record NcmDTO(String codigo, String descricao) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\DTOs\NcmEstadoDTO.java|6|public record NcmEstadoDTO(UUID ncmId, String estado, BigDecimal aliquota) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\Exception\GlobalExceptionHandler.java|18|public ResponseEntity<List<ErroDTO>> handleValidationErrors(MethodArgumentNotValidException ex) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\Exception\GlobalExceptionHandler.java|30|public ResponseEntity<ErroDTO> handleBusiness(BusinessException ex) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\Exception\GlobalExceptionHandler.java|38|public ResponseEntity<ErroDTO> handleGenericException(Exception ex) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|24|public static void assertNotBlank(String value, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|30|public static void assertMinLength(String value, int minLength, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|36|public static void assertEmail(String value, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|42|public static void assertCnpj(String value, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|48|public static void assertValidDate(String value, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|56|public static void assertValidUUID(String value, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|63|public static void validateEnderecoDTO(EnderecoDTO dto, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|77|private static void assertCep(String value, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|82|public static <E extends Enum<E>> void assertValidEnum(String value, Class<E> enumClass, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|90|public static void assertNcm(String value) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|96|public static void assertState(String value) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\services\ValidationUtils.java|102|public static void assertNonNegative(BigDecimal value, String fieldName) {
+D:\Sistema de Vendas\sistema-de-vendas\src\main\java\br\com\sistema_de_vendas\SistemaDeVendasApplication.java|14|public static void main(String[] args) {

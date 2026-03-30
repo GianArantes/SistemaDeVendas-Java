@@ -21,7 +21,9 @@ public class ClienteService {
         assertNotBlank(dto.cnpj(), "cnpj");
         assertCnpj(dto.cnpj(), "cnpj");
         assertNotBlank(dto.ie(), "ie");
-        assertNotBlank(dto.endereco(), "endereco");
+        validateEnderecoDTO(dto.enderecoRegistro(), "enderecoRegistro");
+        validateEnderecoDTO(dto.enderecoEntrega(), "enderecoEntrega");
+        validateEnderecoDTO(dto.enderecoCobranca(), "enderecoCobranca");
         assertNotBlank(dto.email(), "email");
         assertEmail(dto.email(), "email");
         assertNotBlank(dto.telefone(), "telefone");
