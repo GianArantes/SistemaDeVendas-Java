@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sistema_de_vendas.DTOs.ProdutoLitragemDTO;
 import br.com.sistema_de_vendas.models.ProdutoLitragemModel;
 import br.com.sistema_de_vendas.repositories.ProdutoLitragemRepository;
+import br.com.sistema_de_vendas.services.ProdutoLitragemService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -23,16 +24,27 @@ public class ProdutoLitragemController {
     @Autowired
     private ProdutoLitragemRepository produtoLitragemRepository;
 
+    @Autowired
+    private ProdutoLitragemService produtoLitragemService;
+
+    /**
+     * Grava uma nova litragem de produto.
+     */
     @PostMapping
     public ResponseEntity<ProdutoLitragemModel> cadastrarProdutoLitragem(@Valid @RequestBody ProdutoLitragemDTO produtoLitragem) {
+        produtoLitragemService.validate(produtoLitragem);
         ProdutoLitragemModel produtoLitragemModel = new ProdutoLitragemModel();
         produtoLitragemModel.setNome(produtoLitragem.nome());
         ProdutoLitragemModel salvo = produtoLitragemRepository.save(produtoLitragemModel);
         return ResponseEntity.status(201).body(salvo);
     }
 
+    /**
+     * Atualiza o nome de uma litragem existente.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoLitragemModel> atualizarProdutoLitragem(@PathVariable Long id, @Valid @RequestBody ProdutoLitragemDTO produtoLitragem) {
+        produtoLitragemService.validate(produtoLitragem);
         if (!produtoLitragemRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -43,16 +55,25 @@ public class ProdutoLitragemController {
         return ResponseEntity.ok().body(salvo);
     }
 
+    /**
+     * Lista todas as litragems de produto existentes.
+     */
     @GetMapping("/listar")
     public Iterable<ProdutoLitragemModel> listarProdutoLitragem() {
         return produtoLitragemRepository.findAll();
     }
+    /**
+     * Busca uma litragem pelo identificador.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoLitragemModel> getProdutoLitragem(@PathVariable Long id) {
         return produtoLitragemRepository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    /**
+     * Exclui uma litragem pelo seu ID.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarProdutoLitragem(@PathVariable Long id) {
         return produtoLitragemRepository.findById(id)

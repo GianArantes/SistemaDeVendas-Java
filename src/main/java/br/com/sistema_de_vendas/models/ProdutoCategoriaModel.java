@@ -1,18 +1,22 @@
 package br.com.sistema_de_vendas.models;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Entity
-@Table(name = "produto_categoria")
+@Table(name = "produto_categoria", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"nome"})
+})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +25,7 @@ public class ProdutoCategoriaModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String nome;
 }

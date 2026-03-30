@@ -22,8 +22,11 @@ public class NcmModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(unique = true, nullable = false)
+
+    @Column(unique = true, nullable = false, length = 8)
     private String codigo;
+
+    @Column(nullable = false, length = 255)
     private String descricao;
 
 }

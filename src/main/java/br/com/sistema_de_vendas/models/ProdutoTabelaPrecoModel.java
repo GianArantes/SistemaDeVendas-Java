@@ -2,6 +2,7 @@ package br.com.sistema_de_vendas.models;
 
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,12 +25,16 @@ public class ProdutoTabelaPrecoModel {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "produto_id")
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "produto_id", nullable = false)
     private ProdutoModel produto;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tabela_preco_id")
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "tabela_preco_id", nullable = false)
     private TabelaPrecoModel tabelaPreco;
+
+    @Column(nullable = false)
     private Double preco;
 
 }

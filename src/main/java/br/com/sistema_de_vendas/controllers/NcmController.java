@@ -15,24 +15,37 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sistema_de_vendas.DTOs.NcmDTO;
 import br.com.sistema_de_vendas.models.NcmModel;
 import br.com.sistema_de_vendas.repositories.NcmRepository;
+import br.com.sistema_de_vendas.services.NcmService;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/ncms")
 public class NcmController {
+
     @Autowired
     private NcmRepository ncmRepository;
 
+    @Autowired
+    private NcmService ncmService;
+
+    /**
+     * Registra um novo NCM na base de dados.
+     */
     @PostMapping
     public void cadastrarNcm(@Valid @RequestBody NcmDTO ncm) {
+        ncmService.validate(ncm);
         NcmModel ncmModel = new NcmModel();
         ncmModel.setCodigo(ncm.codigo());
         ncmModel.setDescricao(ncm.descricao());
         ncmRepository.save(ncmModel);
     }
 
+    /**
+     * Atualiza um NCM existente pelo seu identificador.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<NcmModel> atualizarNcm(@Valid @PathVariable UUID id, @RequestBody NcmDTO ncm) {
+        ncmService.validate(ncm);
         System.out.println(ncm);
         return ncmRepository.findById(id)
                 .map(ncmModel -> {
@@ -44,6 +57,9 @@ public class NcmController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Retorna os dados de um NCM pelo id.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<NcmModel> getNcm(@PathVariable UUID id) {
         return ncmRepository.findById(id)
@@ -51,11 +67,17 @@ public class NcmController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Lista todos os NCMs cadastrados.
+     */
     @GetMapping("/listar")
     public Iterable<NcmModel> listarNcms() {
         return ncmRepository.findAll();
     }
 
+    /**
+     * Remove um NCM pelo id.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarNcm(@PathVariable UUID id) {
         return ncmRepository.findById(id)

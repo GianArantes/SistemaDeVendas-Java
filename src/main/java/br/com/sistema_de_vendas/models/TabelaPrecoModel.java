@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import br.com.sistema_de_vendas.models.Enum.TabelaStatus;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,15 +23,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "tabela_de_preco")
+@Table(name = "tabela_preco")
 public class TabelaPrecoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false, length = 200)
     private String nomeTabela;
+
+    @Column(nullable = false)
     private LocalDate dataCriacao;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TabelaStatus status;
     @OneToMany(mappedBy = "tabelaPreco", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdutoTabelaPrecoModel> produtos = new ArrayList<>();

@@ -19,6 +19,7 @@ import br.com.sistema_de_vendas.models.UsuarioModel;
 import br.com.sistema_de_vendas.models.Enum.UsuarioRole;
 import br.com.sistema_de_vendas.models.Enum.UsuarioStatus;
 import br.com.sistema_de_vendas.repositories.UsuarioRepository;
+import br.com.sistema_de_vendas.services.UsuarioService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -28,8 +29,15 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
+    /**
+     * Cria um novo usuário se o email não existir em base.
+     */
     @PostMapping
     public ResponseEntity<UsuarioModel> cadastrarUsuario(@Valid @RequestBody UsuarioDTO usuario) {
+        usuarioService.validate(usuario);
         // Verificar se o email já existe
         if (usuarioRepository.existsByEmail(usuario.email())) {
             throw new BusinessException("Email já cadastrado");
@@ -46,11 +54,17 @@ public class UsuarioController {
         return ResponseEntity.status(201).body(salvo);
     }
 
+    /**
+     * Lista todos os usuários registrados.
+     */
     @GetMapping("/listar")
     public Iterable<UsuarioModel> listarUsuarios() {
         return usuarioRepository.findAll();
     }
 
+    /**
+     * Busca usuário por identificador UUID.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioModel> buscarPorId(@PathVariable UUID id) {
         return usuarioRepository.findById(id)
@@ -58,8 +72,12 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Atualiza os dados de um usuário existente.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<UsuarioModel> atualizarUsuario(@Valid @PathVariable UUID id, @RequestBody UsuarioDTO usuarioDto) {
+        usuarioService.validate(usuarioDto);
         return usuarioRepository.findById(id)
                 .map(usuarioExistente -> {
                     usuarioExistente.setNomeCompleto(usuarioDto.nomeCompleto());
@@ -74,6 +92,9 @@ public class UsuarioController {
                 }).orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Exclui um usuário pelo seu identificador.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable UUID id) {
         return usuarioRepository.findById(id)

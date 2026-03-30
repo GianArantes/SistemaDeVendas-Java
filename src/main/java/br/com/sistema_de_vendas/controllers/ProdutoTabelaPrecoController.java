@@ -20,6 +20,7 @@ import br.com.sistema_de_vendas.models.TabelaPrecoModel;
 import br.com.sistema_de_vendas.repositories.ProdutoRepository;
 import br.com.sistema_de_vendas.repositories.ProdutoTabelaPrecoRepository;
 import br.com.sistema_de_vendas.repositories.TabelaPrecoRepository;
+import br.com.sistema_de_vendas.services.ProdutoTabelaPrecoService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -33,10 +34,17 @@ public class ProdutoTabelaPrecoController {
     ProdutoRepository produtoRepository;
 
     @Autowired
+    private ProdutoTabelaPrecoService produtoTabelaPrecoService;
+
+    @Autowired
     TabelaPrecoRepository tabelaPrecoRepository;
 
+    /**
+     * Associa um produto a uma tabela de preço e salva a relação.
+     */
     @PostMapping
     public ResponseEntity<Void> cadastrar(@Valid @RequestBody ProdutoTabelaPrecoDTO dto) {
+        produtoTabelaPrecoService.validate(dto);
         ProdutoModel produto = produtoRepository.findById(dto.produtoId())
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
@@ -51,8 +59,12 @@ public class ProdutoTabelaPrecoController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Atualiza uma associação de produto e tabela de preço existente.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Void> atualizar(@PathVariable UUID id, @Valid @RequestBody ProdutoTabelaPrecoDTO dto) {
+        produtoTabelaPrecoService.validate(dto);
         ProdutoTabelaPrecoModel model = produtoTabelaPrecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ProdutoTabelaPreco não encontrado"));
 
@@ -70,6 +82,9 @@ public class ProdutoTabelaPrecoController {
 
     }
 
+    /**
+     * Recupera uma entrada de preço de produto pelo id.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoTabelaPrecoModel> getProdutoTabelaPreco(@PathVariable UUID id) {
         return produtoTabelaPrecoRepository.findById(id)
@@ -77,11 +92,17 @@ public class ProdutoTabelaPrecoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Lista todas as associações entre produtos e tabelas de preço.
+     */
     @GetMapping("/listar")
     public Iterable<ProdutoTabelaPrecoModel> listarProdutoTabelaPreco() {
         return produtoTabelaPrecoRepository.findAll();
     }
 
+    /**
+     * Exclui a associação de preço de produto indicada pelo id.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable UUID id) {
         produtoTabelaPrecoRepository.deleteById(id);

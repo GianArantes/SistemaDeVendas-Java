@@ -25,12 +25,15 @@ public class NcmEstadoModel {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
-    @Column(length = 2)
+
+    @Column(nullable = false, length = 2)
     private String estado;
+
+    @Column(nullable = false)
     private BigDecimal aliquota;
 
-    @ManyToOne
-    @JoinColumn(name = "ncm_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "ncm_id", nullable = false)
     private NcmModel ncm;
 
 }

@@ -11,7 +11,10 @@ import br.com.sistema_de_vendas.DTOs.ErroDTO;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-   @ExceptionHandler(MethodArgumentNotValidException.class)
+   /**
+     * Converte erros de validação de campos em uma lista de DTOs.
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List<ErroDTO>> handleValidationErrors(MethodArgumentNotValidException ex) {
         List<ErroDTO> errors = ex.getBindingResult().getFieldErrors()
             .stream()
@@ -20,13 +23,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    // Exceção personalizada (ex: Email já existe)
+    /**
+     * Converte uma exceção de regras de negócio em resposta 409.
+     */
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErroDTO> handleBusiness(BusinessException ex) {
         return ResponseEntity.status(409).body(new ErroDTO("geral", ex.getMessage()));
     }
 
-    // Tratamento genérico para outras exceções
+    /**
+     * Retorna um erro genérico para exceções inesperadas do servidor.
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErroDTO> handleGenericException(Exception ex) {
         return ResponseEntity.status(500).body(new ErroDTO("geral", "Erro interno do servidor"));

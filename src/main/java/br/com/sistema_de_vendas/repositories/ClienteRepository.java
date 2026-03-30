@@ -10,7 +10,14 @@ import java.util.UUID;
 @Repository
 public interface ClienteRepository extends JpaRepository<ClienteModel, UUID> {
 
+    /**
+     * Verifica se já existe cliente cadastrado com o email informado.
+     */
     boolean existsByEmail(String email);
+
+    /**
+     * Verifica se já existe cliente cadastrado com o mesmo CNPJ.
+     */
     boolean existsByCnpj(String cnpj);
 
 }

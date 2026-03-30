@@ -18,6 +18,7 @@ import br.com.sistema_de_vendas.Exception.BusinessException;
 import br.com.sistema_de_vendas.models.ClienteModel;
 import br.com.sistema_de_vendas.models.Enum.ClienteStatus;
 import br.com.sistema_de_vendas.repositories.ClienteRepository;
+import br.com.sistema_de_vendas.services.ClienteService;
 import jakarta.validation.Valid;
 
 
@@ -28,13 +29,15 @@ public class ClienteController {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    //Cadastrar um novo cliente
+    @Autowired
+    private ClienteService clienteService;
+
+    /**
+     * Cadastra um novo cliente após validações básicas.
+     */
     @PostMapping
     public ResponseEntity<ClienteModel> cadastrarCliente(@Valid @RequestBody ClienteDTO cliente) {
-        
-        if (cliente.cnpj() == null || cliente.cnpj().trim().isEmpty()) {
-            throw new BusinessException("CNPJ é obrigatório");
-        }
+        clienteService.validate(cliente);
         if (clienteRepository.existsByCnpj(cliente.cnpj())) {
             throw new BusinessException("CNPJ já cadastrado");
         }
@@ -54,13 +57,17 @@ public class ClienteController {
         ClienteModel salvo = clienteRepository.save(clienteNovo);
         return ResponseEntity.status(201).body(salvo);
     }
-    // Listar todos os clientes
+    /**
+     * Retorna a lista completa de clientes cadastrados.
+     */
     @GetMapping("/listar")
     public Iterable<ClienteModel> listarClientes() {
         return clienteRepository.findAll();
     }
     
-    // GET POR ID
+    /**
+     * Recupera um cliente pelo identificador UUID.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ClienteModel> buscarPorId(@PathVariable UUID id) {
         return clienteRepository.findById(id)
@@ -68,9 +75,12 @@ public class ClienteController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ATUALIZAR
+    /**
+     * Atualiza um cliente existente pelo seu ID.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<ClienteModel> atualizarCliente(@Valid @PathVariable UUID id, @RequestBody ClienteDTO cliente) {
+        clienteService.validate(cliente);
         return clienteRepository.findById(id)
                 .map(clienteExistente -> {
                     clienteExistente.setRazaoSocial(cliente.razaoSocial());
@@ -90,7 +100,9 @@ public class ClienteController {
                 }).orElse(ResponseEntity.notFound().build());
     }
 
-    // DELETAR
+    /**
+     * Remove um cliente pelo ID e retorna resposta sem conteúdo.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarCliente(@PathVariable UUID id) {
         return clienteRepository.findById(id)

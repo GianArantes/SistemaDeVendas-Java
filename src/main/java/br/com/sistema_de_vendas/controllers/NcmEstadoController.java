@@ -17,6 +17,7 @@ import br.com.sistema_de_vendas.DTOs.NcmEstadoDTO;
 import br.com.sistema_de_vendas.models.NcmEstadoModel;
 import br.com.sistema_de_vendas.repositories.NcmEstadoRepository;
 import br.com.sistema_de_vendas.repositories.NcmRepository;
+import br.com.sistema_de_vendas.services.NcmEstadoService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,8 +30,15 @@ public class NcmEstadoController {
     @Autowired
     NcmRepository ncmRepository;
 
+    @Autowired
+    private NcmEstadoService ncmEstadoService;
+
+    /**
+     * Cadastra um estado de NCM com alíquota e referência ao NCM.
+     */
     @PostMapping
     public void cadastrarNcmEstado(@Valid @RequestBody NcmEstadoDTO ncmEstado) {
+        ncmEstadoService.validate(ncmEstado);
         NcmEstadoModel ncmEstadoModel = new NcmEstadoModel();
         ncmEstadoModel.setNcm(ncmRepository.findById(ncmEstado.ncmId()).orElse(null));
         ncmEstadoModel.setEstado(ncmEstado.estado());
@@ -38,9 +46,13 @@ public class NcmEstadoController {
         ncmEstadoRepository.save(ncmEstadoModel);
     }
 
+    /**
+     * Atualiza um registro de NCM por estado.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<NcmEstadoModel> atualizarNcmEstado(@Valid @PathVariable UUID id,
             @RequestBody NcmEstadoDTO ncmEstado) {
+        ncmEstadoService.validate(ncmEstado);
         return ncmEstadoRepository.findById(id)
                 .map(ncmEstadoModel -> {
                     ncmEstadoModel.setNcm(ncmRepository.findById(ncmEstado.ncmId()).orElse(null));
@@ -52,6 +64,9 @@ public class NcmEstadoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Remove um registro de NCM por estado.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable UUID id) {
         return ncmEstadoRepository.findById(id)
@@ -62,6 +77,9 @@ public class NcmEstadoController {
     }
 
     
+    /**
+     * Recupera um registro de NCM por seu id.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<NcmEstadoModel> buscarPorId(@PathVariable UUID id) {
         return ncmEstadoRepository.findById(id)
@@ -69,6 +87,9 @@ public class NcmEstadoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Lista todos os estados de um NCM ordenados por nome do estado.
+     */
     @GetMapping("/listar/{id}")
     public Iterable<NcmEstadoModel> listarNcmsEstados(@PathVariable UUID id) {
         return ncmEstadoRepository.findByNcmIdOrderByEstadoAsc(id);

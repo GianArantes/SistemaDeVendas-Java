@@ -19,6 +19,7 @@ import br.com.sistema_de_vendas.repositories.NcmRepository;
 import br.com.sistema_de_vendas.repositories.ProdutoCategoriaRepository;
 import br.com.sistema_de_vendas.repositories.ProdutoLitragemRepository;
 import br.com.sistema_de_vendas.repositories.ProdutoRepository;
+import br.com.sistema_de_vendas.services.ProdutoService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -32,13 +33,20 @@ public class ProdutoController {
     private NcmRepository ncmRepository;
 
     @Autowired
+    private ProdutoService produtoService;
+
+    @Autowired
     private ProdutoCategoriaRepository categoriaRepository;
 
     @Autowired
     private ProdutoLitragemRepository litragemRepository;
 
+    /**
+     * Cadastra um novo produto com suas referências de NCM, categoria e litragem.
+     */
     @PostMapping
     public void cadastrarProduto(@Valid @RequestBody ProdutoDTO produtoNovo) {
+        produtoService.validate(produtoNovo);
         System.out.println(produtoNovo);
         ProdutoModel produtoModel = new ProdutoModel();
         produtoModel.setNome(produtoNovo.nome());
@@ -53,8 +61,12 @@ public class ProdutoController {
 
     }
 
+    /**
+     * Atualiza os dados de um produto existente.
+     */
     @PutMapping("/{id}")
     public void atualizarProduto(@PathVariable long id, @Valid @RequestBody ProdutoDTO produtoNovo) {
+        produtoService.validate(produtoNovo);
         ProdutoModel produtoModel = produtoRepository.findById(id).orElse(null);
         if (produtoModel != null) {
             produtoModel.setNome(produtoNovo.nome());
@@ -70,16 +82,25 @@ public class ProdutoController {
 
     }
 
+    /**
+     * Recupera um produto pelo seu identificador.
+     */
     @GetMapping("/{id}")
     public ProdutoModel getProduto(@PathVariable long id) {
         return produtoRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Retorna todos os produtos cadastrados.
+     */
     @GetMapping ("/listar")
     public List<ProdutoModel> listarProdutos() {
         return produtoRepository.findAll();
     }
 
+    /**
+     * Exclui um produto pelo seu identificador.
+     */
     @DeleteMapping("/{id}")
     public void deletarProduto(@PathVariable long id) {
         produtoRepository.deleteById(id);

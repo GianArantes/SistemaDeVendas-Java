@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.sistema_de_vendas.DTOs.ProdutoCategoriaDTO;
 import br.com.sistema_de_vendas.models.ProdutoCategoriaModel;
 import br.com.sistema_de_vendas.repositories.ProdutoCategoriaRepository;
+import br.com.sistema_de_vendas.services.ProdutoCategoriaService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -22,18 +23,29 @@ public class ProdutoCategoriaController {
     @Autowired
     private ProdutoCategoriaRepository produtoCategoriaRepository;
 
+    @Autowired
+    private ProdutoCategoriaService produtoCategoriaService;
+
+    /**
+     * Cadastra uma nova categoria de produto.
+     */
     @PostMapping
     public ResponseEntity<ProdutoCategoriaModel> cadastrarProdutoCategoria(
             @Valid @RequestBody ProdutoCategoriaDTO produtoCategoria) {
+        produtoCategoriaService.validate(produtoCategoria);
         ProdutoCategoriaModel produtoCategoriaModel = new ProdutoCategoriaModel();
         produtoCategoriaModel.setNome(produtoCategoria.nome());
         ProdutoCategoriaModel salvo = produtoCategoriaRepository.save(produtoCategoriaModel);
         return ResponseEntity.status(201).body(salvo);
     }
 
+    /**
+     * Atualiza um nome de categoria existente.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoCategoriaModel> atualizarProdutoCategoria(@PathVariable Long id,
             ProdutoCategoriaDTO produtoCategoria) {
+        produtoCategoriaService.validate(produtoCategoria);
         if (!produtoCategoriaRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -44,11 +56,17 @@ public class ProdutoCategoriaController {
         return ResponseEntity.ok().body(salvo);
     }
 
+    /**
+     * Retorna todas as categorias de produto cadastradas.
+     */
     @GetMapping("/listar")
     public Iterable<ProdutoCategoriaModel> listarProdutoCategoria() {
         return produtoCategoriaRepository.findAll();
     }
 
+    /**
+     * Busca uma categoria pelo seu identificador.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoCategoriaModel> getProdutoCategoria(@PathVariable Long id) {
         return produtoCategoriaRepository.findById(id)
@@ -56,6 +74,9 @@ public class ProdutoCategoriaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * Remove uma categoria pelo identificador se existir.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarProdutoCategoria(@PathVariable Long id) {
         return produtoCategoriaRepository.findById(id)

@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface NcmEstadoRepository extends JpaRepository<NcmEstadoModel, UUID> {
 
+    /**
+     * Retorna estados de um NCM ordenados em ordem alfabética.
+     */
     List<NcmEstadoModel> findByNcmIdOrderByEstadoAsc(UUID ncmId); 
 
 }
