@@ -3,7 +3,6 @@ package br.com.sistema_de_vendas.controllers;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,25 +20,18 @@ import br.com.sistema_de_vendas.repositories.ProdutoLitragemRepository;
 import br.com.sistema_de_vendas.repositories.ProdutoRepository;
 import br.com.sistema_de_vendas.services.ProdutoService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/produtos")
+@AllArgsConstructor
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
-    private NcmRepository ncmRepository;
-
-    @Autowired
-    private ProdutoService produtoService;
-
-    @Autowired
-    private ProdutoCategoriaRepository categoriaRepository;
-
-    @Autowired
-    private ProdutoLitragemRepository litragemRepository;
+    private final ProdutoRepository produtoRepository;
+    private final NcmRepository ncmRepository;
+    private final ProdutoService produtoService;
+    private final ProdutoCategoriaRepository categoriaRepository;
+    private final ProdutoLitragemRepository litragemRepository;
 
     /**
      * Cadastra um novo produto com suas referências de NCM, categoria e litragem.

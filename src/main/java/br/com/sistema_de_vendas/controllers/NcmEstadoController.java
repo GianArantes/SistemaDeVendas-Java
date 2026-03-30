@@ -2,7 +2,6 @@ package br.com.sistema_de_vendas.controllers;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,19 +18,16 @@ import br.com.sistema_de_vendas.repositories.NcmEstadoRepository;
 import br.com.sistema_de_vendas.repositories.NcmRepository;
 import br.com.sistema_de_vendas.services.NcmEstadoService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/ncms-estados")
+@AllArgsConstructor
 public class NcmEstadoController {
 
-    @Autowired
-    NcmEstadoRepository ncmEstadoRepository;
-
-    @Autowired
-    NcmRepository ncmRepository;
-
-    @Autowired
-    private NcmEstadoService ncmEstadoService;
+    private final NcmEstadoRepository ncmEstadoRepository;
+    private final NcmRepository ncmRepository;
+    private final NcmEstadoService ncmEstadoService;
 
     /**
      * Cadastra um estado de NCM com alíquota e referência ao NCM.
@@ -76,7 +72,6 @@ public class NcmEstadoController {
                 }).orElse(ResponseEntity.notFound().build());
     }
 
-    
     /**
      * Recupera um registro de NCM por seu id.
      */

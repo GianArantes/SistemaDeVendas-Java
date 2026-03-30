@@ -21,16 +21,16 @@ import br.com.sistema_de_vendas.models.Enum.UsuarioStatus;
 import br.com.sistema_de_vendas.repositories.UsuarioRepository;
 import br.com.sistema_de_vendas.services.UsuarioService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/usuarios")
+@AllArgsConstructor
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private UsuarioService usuarioService;
+    
+    private final UsuarioRepository usuarioRepository;    
+    private final UsuarioService usuarioService;
 
     /**
      * Cria um novo usuário se o email não existir em base.

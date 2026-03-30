@@ -1,6 +1,5 @@
 package br.com.sistema_de_vendas.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,22 +15,22 @@ import br.com.sistema_de_vendas.models.ProdutoLitragemModel;
 import br.com.sistema_de_vendas.repositories.ProdutoLitragemRepository;
 import br.com.sistema_de_vendas.services.ProdutoLitragemService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/litragem")
+@AllArgsConstructor
 public class ProdutoLitragemController {
 
-    @Autowired
-    private ProdutoLitragemRepository produtoLitragemRepository;
-
-    @Autowired
-    private ProdutoLitragemService produtoLitragemService;
+    private final ProdutoLitragemRepository produtoLitragemRepository;
+    private final  ProdutoLitragemService produtoLitragemService;
 
     /**
      * Grava uma nova litragem de produto.
      */
     @PostMapping
-    public ResponseEntity<ProdutoLitragemModel> cadastrarProdutoLitragem(@Valid @RequestBody ProdutoLitragemDTO produtoLitragem) {
+    public ResponseEntity<ProdutoLitragemModel> cadastrarProdutoLitragem(
+            @Valid @RequestBody ProdutoLitragemDTO produtoLitragem) {
         produtoLitragemService.validate(produtoLitragem);
         ProdutoLitragemModel produtoLitragemModel = new ProdutoLitragemModel();
         produtoLitragemModel.setNome(produtoLitragem.nome());
@@ -43,14 +42,15 @@ public class ProdutoLitragemController {
      * Atualiza o nome de uma litragem existente.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoLitragemModel> atualizarProdutoLitragem(@PathVariable Long id, @Valid @RequestBody ProdutoLitragemDTO produtoLitragem) {
+    public ResponseEntity<ProdutoLitragemModel> atualizarProdutoLitragem(@PathVariable Long id,
+            @Valid @RequestBody ProdutoLitragemDTO produtoLitragem) {
         produtoLitragemService.validate(produtoLitragem);
         if (!produtoLitragemRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
         ProdutoLitragemModel produtoLitragemModel = new ProdutoLitragemModel();
         produtoLitragemModel.setId(id);
-        produtoLitragemModel.setNome(produtoLitragem.nome());       
+        produtoLitragemModel.setNome(produtoLitragem.nome());
         ProdutoLitragemModel salvo = produtoLitragemRepository.save(produtoLitragemModel);
         return ResponseEntity.ok().body(salvo);
     }
@@ -62,6 +62,7 @@ public class ProdutoLitragemController {
     public Iterable<ProdutoLitragemModel> listarProdutoLitragem() {
         return produtoLitragemRepository.findAll();
     }
+
     /**
      * Busca uma litragem pelo identificador.
      */
@@ -71,6 +72,7 @@ public class ProdutoLitragemController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
     /**
      * Exclui uma litragem pelo seu ID.
      */

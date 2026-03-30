@@ -2,7 +2,6 @@ package br.com.sistema_de_vendas.controllers;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,22 +21,18 @@ import br.com.sistema_de_vendas.repositories.ProdutoTabelaPrecoRepository;
 import br.com.sistema_de_vendas.repositories.TabelaPrecoRepository;
 import br.com.sistema_de_vendas.services.ProdutoTabelaPrecoService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/produto-tabela-preco")
+@AllArgsConstructor
 public class ProdutoTabelaPrecoController {
+ 
+    private final ProdutoRepository produtoRepository;
+    private final ProdutoTabelaPrecoRepository produtoTabelaPrecoRepository;
+    private final TabelaPrecoRepository tabelaPrecoRepository;
+    private final ProdutoTabelaPrecoService produtoTabelaPrecoService;
 
-    @Autowired
-    ProdutoTabelaPrecoRepository produtoTabelaPrecoRepository;
-
-    @Autowired
-    ProdutoRepository produtoRepository;
-
-    @Autowired
-    private ProdutoTabelaPrecoService produtoTabelaPrecoService;
-
-    @Autowired
-    TabelaPrecoRepository tabelaPrecoRepository;
 
     /**
      * Associa um produto a uma tabela de preço e salva a relação.

@@ -1,7 +1,6 @@
 package br.com.sistema_de_vendas.controllers;
 
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +16,16 @@ import br.com.sistema_de_vendas.models.Enum.TabelaStatus;
 import br.com.sistema_de_vendas.repositories.TabelaPrecoRepository;
 import br.com.sistema_de_vendas.services.TabelaPrecoService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/tabela-preco")
+@AllArgsConstructor
 public class TabelaPrecoController {
 
-    @Autowired
-    TabelaPrecoRepository tabelaDePrecoRepository;
-
-    @Autowired
-    private TabelaPrecoService tabelaPrecoService;
+    
+    private final TabelaPrecoRepository tabelaDePrecoRepository;
+    private final TabelaPrecoService tabelaPrecoService;
 
     /**
      * Cria uma nova tabela de preços.

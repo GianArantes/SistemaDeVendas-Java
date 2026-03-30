@@ -15,16 +15,15 @@ import br.com.sistema_de_vendas.models.ProdutoCategoriaModel;
 import br.com.sistema_de_vendas.repositories.ProdutoCategoriaRepository;
 import br.com.sistema_de_vendas.services.ProdutoCategoriaService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/categorias")
+@AllArgsConstructor
 public class ProdutoCategoriaController {
 
-    @Autowired
-    private ProdutoCategoriaRepository produtoCategoriaRepository;
-
-    @Autowired
-    private ProdutoCategoriaService produtoCategoriaService;
+    private final ProdutoCategoriaRepository produtoCategoriaRepository;
+    private final ProdutoCategoriaService produtoCategoriaService;
 
     /**
      * Cadastra uma nova categoria de produto.

@@ -2,7 +2,6 @@ package br.com.sistema_de_vendas.controllers;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,16 +16,15 @@ import br.com.sistema_de_vendas.models.NcmModel;
 import br.com.sistema_de_vendas.repositories.NcmRepository;
 import br.com.sistema_de_vendas.services.NcmService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/ncms")
+@AllArgsConstructor
 public class NcmController {
-
-    @Autowired
-    private NcmRepository ncmRepository;
-
-    @Autowired
-    private NcmService ncmService;
+    
+    private final NcmRepository ncmRepository;
+    private final NcmService ncmService;
 
     /**
      * Registra um novo NCM na base de dados.
