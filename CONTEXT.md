@@ -1,7 +1,24 @@
+<!--
+Copyright (C) 2026 Gianpaolo Elias Arantes (GianArantes)
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License.
+-->
+
 # CONTEXT
 
 ## Objetivo
 Este arquivo orienta a IA na criação e manutenção do aplicativo de forma assistida. Ele descreve a arquitetura, os principais componentes, o fluxo de dados e as regras de implementação específicas do projeto.
+
+## LICENCIAMENTO
+O projeto é regido pela GNU GPLv3. Todo arquivo do projeto deve conter o cabeçalho de copyright no topo.
+
+Copyright (C) 2026 Gianpaolo Elias Arantes (GianArantes)
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License.
+
+Sempre atualize o arquivo `CONTEXT.md` quando uma solicitação alterar o dicionário de entidades, campos ou a estrutura de domínio.
 
 ## Visão geral do projeto
 Projeto Java Spring Boot de backend para um sistema de vendas simples, com API REST e persistência em banco de dados MySQL.
@@ -48,29 +65,35 @@ Projeto Java Spring Boot de backend para um sistema de vendas simples, com API R
 - `ClienteModel`: `id`, `razaoSocial`, `nomeFantasia`, `cnpj`, `ie`, `dataFundacao`, `email`, `telefone`, `status`, `enderecoRegistro`, `enderecoEntrega`, `enderecoCobranca`.
 - `EnderecoModel`: `id`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `estado`, `cep`.
 - `UsuarioModel`: `id`, `nome`, `email`, `senha`, `role`, `status`.
-- `ProdutoModel`: `id`, `descricao`, `codigo`, `ncm`, `produtoCategoria`, `produtoLitragem`, `valor`.
-- `TabelaPrecoModel`: `id`, `descricao`, `dataInicio`, `dataFim`, `ativo`.
+- `ProdutoModel`: `id`, `refNf`, `nome`, `qtdPorEmbalagem`, `ipi`, `peso`, `ncm`, `categoria`, `litragem`.
+- `TabelaPrecoModel`: `id`, `nomeTabela`, `dataCriacao`, `status`.
 - `ProdutoTabelaPrecoModel`: `id`, `produto`, `tabelaPreco`, `preco`.
 - `NcmModel`: `id`, `codigo`, `descricao`.
 - `NcmEstadoModel`: `id`, `ncm`, `estado`, `aliquota`.
+- `VendaModel`: `id`, `vendedorId`, `cliente`, `tabelaPreco`, `frete`, `transportadoraNome`, `transportadoraCnpj`, `transportadoraPlaca`, `itens`, `valorProdutos`, `valorIpi`, `valorSt`, `valorGeral`.
+- `VendaItemModel`: `id`, `venda`, `produto`, `produtoTabelaPreco`, `quantidade`, `precoUnitario`, `valorBruto`, `descontoPercentual`, `valorLiquido`, `valorIpi`, `valorSt`, `custoUnitarioCliente`.
 
 ## 📦 Domínio de Vendas e Tributação
-### Entidades de Apoio
-- `PrazoVendaModel`: `id`, `descricao`, `quantidadeDias`.
-- `TransportadoraModel`: `id`, `razaoSocial`, `cnpj`, `telefone`.
+### Entidades de Venda
+- `VendaModel`: registra vendedor, cliente, tabela de preço, frete, transportadora, itens e totais.
+- `VendaItemModel`: armazena produto, preço referenciado em `ProdutoTabelaPrecoModel`, quantidade, descontos, valores de imposto e custo unitário.
+- `TransportadoraDTO`: `nome`, `cnpj`, `placa`.
 
 ### Regras de Cálculo e Impostos
-1. **Preço de Item:** Buscar em `ProdutoTabelaPrecoModel(produto, tabela)`.
-2. **Desconto:** Aplicar `valorItem * (1 - desconto/100)` antes de qualquer imposto.
-3. **IPI:** Calculado sobre o valor com desconto.
-4. **ST (Substituição Tributária):** - Origem: `NcmEstadoModel` (filtro por NCM do produto e UF do endereço de entrega do cliente).
-   - Se não encontrado, alíquota = 0.
-5. **Custo Unitário Cliente:** `(ValorComDesconto + IPI + ST) / produto.qtdPorEmbalagem`.
-6. **Frete:** Tipos permitidos: `CIF`, `RETIRA`, `FOB`. Se `FOB`, exige dados da transportadora.
+1. **Preço de Item:** obrigatoriamente buscar em `ProdutoTabelaPrecoModel` para o produto e tabela de preço selecionados.
+2. **Desconto:** aplicar percentual no valor bruto antes de impostos.
+3. **IPI:** calcular sobre o valor líquido após desconto.
+4. **ST (Substituição Tributária):** buscar `NcmEstadoModel` por `NCM` do produto e UF do cliente; se não existir, lançar `BusinessException`.
+5. **Custo Unitário Cliente:** `(valor líquido + IPI + ST) / qtdPorEmbalagem`.
+6. **Frete:** aceitar `CIF`, `RETIRA`, `FOB`; se `FOB`, os dados da transportadora no DTO são obrigatórios.
 
 ### Contratos de Venda
-- `VendaRequestDTO`: `vendedorId`, `clienteCnpj`, `prazoVendaId`, `tabelaPrecoId`, `tipoFrete`, `transportadoraDTO`, `List<VendaItemDTO>`.
+- `VendaDTO`: `vendedorId`, `clienteCnpj`, `tabelaPrecoId`, `frete`, `transportadora`, `List<VendaItemDTO>`.
+- `VendaItemDTO`: `produtoId`, `quantidade`, `descontoPercentual`.
+- `VendaResponseDTO`: retorna totais e itens calculados.
+- `TransportadoraDTO`: nome, cnpj, placa.
 
+- `vendedorId` deve ser recebido pelo DTO hoje; mais tarde deve ser integrado a Spring Security via TODO.
 
 ## Assinatura de Métodos de Negócio (Service Contracts)
 - Cada serviço deve expor um contrato claro em métodos públicos simples.
@@ -127,6 +150,7 @@ Projeto Java Spring Boot de backend para um sistema de vendas simples, com API R
 ## Observações finais
 - Não alterar a estrutura de pacotes existente sem necessidade.
 - Ao modificar qualquer endpoint, atualizar também os testes unitários correspondentes.
+- Se a solicitação alterar o dicionário de entidades, campos ou estrutura de domínio do CONTEXT, atualizar também o arquivo `CONTEXT.md`.
 - Usar nomes em português nos comentários e mensagens de erro, mantendo consistência com o projeto.
 
 ## Infraestrutura e deploy

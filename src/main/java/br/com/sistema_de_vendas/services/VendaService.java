@@ -1,3 +1,10 @@
+/*
+ * Copyright (C) 2026 Gianpaolo Elias Arantes (GianArantes)
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License.
+ */
+
 package br.com.sistema_de_vendas.services;
 
 import java.util.UUID;
@@ -44,20 +51,20 @@ public class VendaService {
         assertNotBlank(dto.clienteCnpj(), "clienteCnpj");
         // TODO: integrar vendedorId com Spring Security futuramente
         if (dto.vendedorId() == null) {
-            throw new BusinessException("VENDEDOR_ID_REQUIRED");
+            throw new BusinessException("ID_DO_VENDEDOR_OBRIGATORIO");
         }
         if (dto.tabelaPrecoId() == null) {
-            throw new BusinessException("TABELA_PRECO_ID_REQUIRED");
+            throw new BusinessException("ID_TABELA_PRECO_OBRIGATORIO");
         }
         assertNotBlank(dto.frete(), "frete");
         if (dto.itens() == null || dto.itens().isEmpty()) {
-            throw new BusinessException("VENDA_MUST_HAVE_ITEMS");
+            throw new BusinessException("VENDA_DEVE_CONTER_ITENS");
         }
 
         if (dto.frete().equalsIgnoreCase("FOB")) {
             TransportadoraDTO transportadora = dto.transportadora();
             if (transportadora == null) {
-                throw new BusinessException("TRANSPORTADORA_REQUIRED_FOR_FOB");
+                throw new BusinessException("TRANSPORTADORA_OBRIGATORIA_PARA_FOB");
             }
             assertNotBlank(transportadora.nome(), "transportadora.nome");
             assertNotBlank(transportadora.cnpj(), "transportadora.cnpj");
@@ -65,10 +72,10 @@ public class VendaService {
         }
 
         ClienteModel cliente = clienteRepository.findByCnpj(dto.clienteCnpj())
-                .orElseThrow(() -> new BusinessException("CLIENT_NOT_FOUND"));
+                .orElseThrow(() -> new BusinessException("CLIENTE_NAO_ENCONTRADO"));
 
         var tabelaPreco = tabelaPrecoRepository.findById(dto.tabelaPrecoId())
-                .orElseThrow(() -> new BusinessException("TABELA_PRECO_NOT_FOUND"));
+                .orElseThrow(() -> new BusinessException("TABELA_DE_PRECO_NAO_ENCONTRADA"));
 
         VendaModel venda = new VendaModel();
         venda.setVendedorId(dto.vendedorId());
@@ -88,25 +95,25 @@ public class VendaService {
 
         for (VendaItemDTO itemDto : dto.itens()) {
             if (itemDto.produtoId() == null) {
-                throw new BusinessException("PRODUCT_ID_REQUIRED");
+                throw new BusinessException("ID_PRODUTO_OBRIGATORIO");
             }
             if (itemDto.quantidade() == null || itemDto.quantidade() <= 0) {
-                throw new BusinessException("INVALID_QUANTITY");
+                throw new BusinessException("QUANTIDADE_INVALIDA");
             }
             if (itemDto.descontoPercentual() == null || itemDto.descontoPercentual() < 0 || itemDto.descontoPercentual() > 100) {
-                throw new BusinessException("INVALID_DISCOUNT_PERCENTAGE");
+                throw new BusinessException("PERCENTUAL_DE_DESCONTO_INVALIDO");
             }
 
             ProdutoModel produto = produtoRepository.findById(itemDto.produtoId())
-                    .orElseThrow(() -> new BusinessException("PRODUCT_NOT_FOUND"));
+                    .orElseThrow(() -> new BusinessException("PRODUTO_NAO_ENCONTRADO"));
 
             ProdutoTabelaPrecoModel precoModel = produtoTabelaPrecoRepository
                     .findByTabelaPrecoIdAndProdutoId(dto.tabelaPrecoId(), produto.getId())
-                    .orElseThrow(() -> new BusinessException("PRODUCT_PRICE_NOT_FOUND"));
+                    .orElseThrow(() -> new BusinessException("PRECO_DO_PRODUTO_NAO_ENCONTRADO"));
 
             NcmEstadoModel ncmEstado = ncmEstadoRepository
                     .findByNcmCodigoAndEstadoIgnoreCase(produto.getNcm().getCodigo(), cliente.getEnderecoEntrega().getEstado())
-                    .orElseThrow(() -> new BusinessException("ST_RATE_NOT_FOUND"));
+                    .orElseThrow(() -> new BusinessException("ALIQUOTA_ST_NAO_ENCONTRADA"));
 
             double quantidade = itemDto.quantidade();
             double precoUnitario = precoModel.getPreco();
@@ -117,7 +124,7 @@ public class VendaService {
             double st = valorLiquido * (ncmEstado.getAliquota().doubleValue() / 100d);
 
             if (produto.getQtdPorEmbalagem() == null || produto.getQtdPorEmbalagem() == 0) {
-                throw new BusinessException("INVALID_PRODUCT_PACKAGING_QUANTITY");
+                throw new BusinessException("QTD_POR_EMBALAGEM_INVALIDA");
             }
             double totalComImpostos = valorLiquido + ipi + st;
             double custoUnitarioCliente = totalComImpostos / produto.getQtdPorEmbalagem();
@@ -155,9 +162,9 @@ public class VendaService {
     @Transactional(readOnly = true)
     public VendaModel buscarVenda(UUID vendaId) {
         if (vendaId == null) {
-            throw new BusinessException("VENDA_ID_REQUIRED");
+            throw new BusinessException("ID_DA_VENDA_OBRIGATORIO");
         }
         return vendaRepository.findById(vendaId)
-                .orElseThrow(() -> new BusinessException("SALE_NOT_FOUND"));
+                .orElseThrow(() -> new BusinessException("VENDA_NAO_ENCONTRADA"));
     }
 }
